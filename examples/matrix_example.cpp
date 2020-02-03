@@ -73,8 +73,8 @@ void kdtree_demo(const size_t nSamples, const size_t dim) {
   //    Some of the different possibilities (uncomment just one)
   // ------------------------------------------------------------
   // Dimensionality set at run-time (default: L2)
-  typedef KDTreeEigenMatrixAdaptor<Eigen::Matrix<num_t, Dynamic, Dynamic>>
-      my_kd_tree_t;
+  //typedef KDTreeEigenMatrixAdaptor<Eigen::Matrix<num_t, Dynamic, Dynamic>>
+  //    my_kd_tree_t;
 
   // Dimensionality set at compile-time
   //	typedef KDTreeEigenMatrixAdaptor< Eigen::Matrix<num_t,Dynamic,Dynamic> >
@@ -87,17 +87,19 @@ void kdtree_demo(const size_t nSamples, const size_t dim) {
 
   // Dimensionality set at compile-time: Explicit selection of the distance
   // metric: L2_simple
-  //	typedef KDTreeEigenMatrixAdaptor<
-  // Eigen::Matrix<num_t,Dynamic,Dynamic>,nanoflann::metric_L2_Simple>
-  // my_kd_tree_t;
+  typedef KDTreeEigenMatrixAdaptor<
+   Eigen::Matrix<num_t,Dynamic,Dynamic>, -1, nanoflann::metric_L2_Simple>
+   my_kd_tree_t;
 
   // Dimensionality set at compile-time: Explicit selection of the distance
   // metric: L1
   //	typedef KDTreeEigenMatrixAdaptor<
   // Eigen::Matrix<num_t,Dynamic,Dynamic>,nanoflann::metric_L1>  my_kd_tree_t;
 
-  my_kd_tree_t mat_index(dim, std::cref(mat), 10 /* max leaf */);
-  mat_index.index->buildIndex();
+  my_kd_tree_t mat_index_org(dim, std::cref(mat), 10 /* max leaf */);
+  mat_index_org.index->buildIndex();
+
+  my_kd_tree_t mat_index(std::move(mat_index_org));
 
   // do a knn search
   const size_t num_results = 3;
