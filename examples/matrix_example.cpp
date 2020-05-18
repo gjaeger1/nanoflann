@@ -96,10 +96,8 @@ void kdtree_demo(const size_t nSamples, const size_t dim) {
   //	typedef KDTreeEigenMatrixAdaptor<
   // Eigen::Matrix<num_t,Dynamic,Dynamic>,nanoflann::metric_L1>  my_kd_tree_t;
 
-  my_kd_tree_t mat_index_org(dim, std::cref(mat), 10 /* max leaf */);
-  mat_index_org.index->buildIndex();
-
-  my_kd_tree_t mat_index(std::move(mat_index_org));
+  my_kd_tree_t mat_index(dim, std::cref(mat), 10 /* max leaf */);
+  mat_index.index->buildIndex();
 
   // do a knn search
   const size_t num_results = 3;
